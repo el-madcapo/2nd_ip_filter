@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.2)
+
+set (PROJECT_VERSION_MAJOR 0)
+set (PROJECT_VERSION_MINOR 7)
+
+project(ip_filter VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
+#project(helloworld VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.$ENV{TRAVIS_BUILD_NUMBER})
+
+add_executable(ip_filter ip_filter.cpp)
+
+set_target_properties(ip_filter  PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra"
+)
+
+install(TARGETS ip_filter RUNTIME DESTINATION bin)
+
+set(CPACK_GENERATOR DEB)
+
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+
+set(CPACK_PACKAGE_CONTACT dontevenwriteme@example.com)
+
+include(CPack)
+
