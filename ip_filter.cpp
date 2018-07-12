@@ -1,50 +1,51 @@
-#include <cassert>
-#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
 #include <cmath>
 
-using vec_vec_int = std::vector<std::vector<int> >;
+using vec_vec_int = std::vector<std::vector<int>>;
 
-void ip_sorting(const vec_vec_int& vectorOriginal, vec_vec_int& vectorSorted, 
-                      std::vector<unsigned int>& numberIndexesOne, 
-                      std::vector<unsigned int>& numberIndexes4670, 
-                      std::vector<unsigned int>& numberIndexes46) // sorting by weight of ip address
+void ip_sorting(const vec_vec_int& vector_original, vec_vec_int& vector_sorted, 
+                      std::vector<unsigned int>& number_indexes_1, 
+                      std::vector<unsigned int>& number_indexes_4670, 
+                      std::vector<unsigned int>& number_indexes_46) // sorting by weight of ip address
 {
-	std::vector<std::pair<long double, int> > weightAndIndex;
+	std::vector<std::pair<long double, int>> weight_and_index; 
 		
-	for (unsigned int i = 0; i < vectorOriginal.size(); ++i)
+	for (unsigned int i = 0; i < vector_original.size(); ++i)
 	{
 		long double ip_weight = 0.0;
-		ip_weight = vectorOriginal[i][0] * pow(256.0, 4) + 
-		            vectorOriginal[i][1] * pow(256.0, 3) + 
-		            vectorOriginal[i][2] * pow(256.0, 2) + 
-		            vectorOriginal[i][3] * 256.0;
+		ip_weight = vector_original[i][0] * pow(256.0, 4) + 
+		            vector_original[i][1] * pow(256.0, 3) + 
+		            vector_original[i][2] * pow(256.0, 2) + 
+		            vector_original[i][3] * 256.0;
 
-		std::pair<long double, int> pairWeightAndIndex; 
-		pairWeightAndIndex.first = ip_weight;
-		pairWeightAndIndex.second = i;
+		std::pair<long double, int> pair_weight_and_index; 
+		pair_weight_and_index.first = ip_weight;
+		pair_weight_and_index.second = i;
 		
-		weightAndIndex.emplace_back(pairWeightAndIndex);
+		weight_and_index.emplace_back(pair_weight_and_index);
 	}
 	
-	std::sort(weightAndIndex.begin(), weightAndIndex.end());
+	std::sort(weight_and_index.begin(), weight_and_index.end());
 	
-	for(int i = weightAndIndex.size()-1; i >= 0; --i) 
+	for(int i = weight_and_index.size()-1; i >= 0; --i) 
 	{
-        vectorSorted.emplace_back(vectorOriginal[weightAndIndex[i].second]);
+        vector_sorted.emplace_back(vector_original[weight_and_index[i].second]);
         
-        if(vectorSorted[vectorSorted.size() - 1][0] == 1) 
-        	numberIndexesOne.emplace_back(vectorSorted.size() - 1);
+        if(vector_sorted[vector_sorted.size() - 1][0] == 1) 
+        	number_indexes_1.emplace_back(vector_sorted.size() - 1);
          
-        if(vectorSorted[vectorSorted.size() - 1][0] == 46 && vectorSorted[vectorSorted.size() - 1][1] == 70)  
-        	numberIndexes4670.emplace_back(vectorSorted.size() - 1 );  
+        if(vector_sorted[vector_sorted.size() - 1][0] == 46 
+        	&& vector_sorted[vector_sorted.size() - 1][1] == 70)  
+        	   { number_indexes_4670.emplace_back(vector_sorted.size() - 1 ); }  
 
-        if(vectorSorted[vectorSorted.size() - 1][0] == 46 || vectorSorted[vectorSorted.size() - 1][1] == 46 
-        	|| vectorSorted[vectorSorted.size() - 1][2] == 46 || vectorSorted[vectorSorted.size() - 1][3] == 46)  
-        	numberIndexes46.emplace_back(vectorSorted.size() - 1);
+        if(vector_sorted[vector_sorted.size() - 1][0] == 46 
+        	|| vector_sorted[vector_sorted.size() - 1][1] == 46 
+        	|| vector_sorted[vector_sorted.size() - 1][2] == 46 
+        	|| vector_sorted[vector_sorted.size() - 1][3] == 46)  
+        	    { number_indexes_46.emplace_back(vector_sorted.size() - 1); }
     }
 }
 
@@ -84,46 +85,44 @@ int main(int argc, char const *argv[])
         }     
 
         vec_vec_int ip_pool_sorted;
-        std::vector<unsigned int> indexesOne;
-        std::vector<unsigned int> indexes4670;
-        std::vector<unsigned int> indexes46;
+        std::vector<unsigned int> indexes_1;
+        std::vector<unsigned int> indexes_4670;
+        std::vector<unsigned int> indexes_46;
 
-        ip_sorting(ip_pool, ip_pool_sorted, indexesOne, indexes4670, indexes46);
+        ip_sorting(ip_pool, ip_pool_sorted, indexes_1, indexes_4670, indexes46);
 
-       for(auto ip : ip_pool_sorted) 
+        for(const auto& ip : ip_pool_sorted) 
         {
-            int indexCounter = 0;
-            for(auto ip_part : ip)  
+            for(auto i = 0; i < 4; ++i)  
             {
-                if (indexCounter != 0)  std::cout << ".";
-                std::cout << ip_part;
-                ++indexCounter;
+                if (i != 0)  std::cout << ".";
+                std::cout << ip[i];
             }
             std::cout << std::endl;
         }        
         
         for(auto i = 0; i < indexesOne.size(); ++i)
         {
-    		std::cout << ip_pool_sorted[indexesOne[i]][0] << "." 
-    		          << ip_pool_sorted[indexesOne[i]][1] << "." 
-    		          << ip_pool_sorted[indexesOne[i]][2]  << "." 
-    		          << ip_pool_sorted[indexesOne[i]][3] << std::endl;
+    		std::cout << ip_pool_sorted[indexes_1[i]][0] << "." 
+    		          << ip_pool_sorted[indexes_1[i]][1] << "." 
+    		          << ip_pool_sorted[indexes_1[i]][2]  << "." 
+    		          << ip_pool_sorted[indexes_1[i]][3] << std::endl;
         }
         
         for(auto i = 0; i < indexes4670.size(); ++i)
         {
-    		std::cout << ip_pool_sorted[indexes4670[i]][0] << "." 
-    		          << ip_pool_sorted[indexes4670[i]][1] << "." 
-    		          << ip_pool_sorted[indexes4670[i]][2] << "." 
-    		          << ip_pool_sorted[indexes4670[i]][3] << std::endl;
+    		std::cout << ip_pool_sorted[indexes_4670[i]][0] << "." 
+    		          << ip_pool_sorted[indexes_4670[i]][1] << "." 
+    		          << ip_pool_sorted[indexes_4670[i]][2] << "." 
+    		          << ip_pool_sorted[indexes_4670[i]][3] << std::endl;
         }
 
         for(auto i = 0; i < indexes46.size(); ++i)
         {
-    		std::cout << ip_pool_sorted[indexes46[i]][0] << "." 
-    		          << ip_pool_sorted[indexes46[i]][1] << "." 
-    		          << ip_pool_sorted[indexes46[i]][2] 
-                      << "." << ip_pool_sorted[indexes46[i]][3] << std::endl;
+    		std::cout << ip_pool_sorted[indexes_46[i]][0] << "." 
+    		          << ip_pool_sorted[indexes_46[i]][1] << "." 
+    		          << ip_pool_sorted[indexes_46[i]][2] << "." 
+    		          << ip_pool_sorted[indexes_46[i]][3] << std::endl;
         }     
    }
     catch(const std::exception &e)
