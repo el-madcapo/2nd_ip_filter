@@ -1,4 +1,6 @@
 language: cpp
+include:
+ - env: CXX=g++-7 CC=gcc-7
 addons:
 apt:
    sources:
