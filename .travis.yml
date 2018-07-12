@@ -1,7 +1,15 @@
 language: cpp
+
+apt:
+   sources:
+     - ubuntu-toolchain-r-test
+   packages:
+     - g++-7
+
 before_script:
 
 script:
+- CXX=/usr/bin/g++-7 CC=/usr/bin/gcc-7 
 - cmake .
 - cmake --build .
 - cmake --build . --target package
