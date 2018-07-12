@@ -89,7 +89,7 @@ int main(int argc, char const *argv[])
         std::vector<unsigned int> indexes_4670;
         std::vector<unsigned int> indexes_46;
 
-        ip_sorting(ip_pool, ip_pool_sorted, indexes_1, indexes_4670, indexes46);
+        ip_sorting(ip_pool, ip_pool_sorted, indexes_1, indexes_4670, indexes_46);
 
         for(const auto& ip : ip_pool_sorted) 
         {
@@ -101,7 +101,7 @@ int main(int argc, char const *argv[])
             std::cout << std::endl;
         }        
         
-        for(auto i = 0; i < indexesOne.size(); ++i)
+        for(auto i = 0; i < indexes_1.size(); ++i)
         {
     		std::cout << ip_pool_sorted[indexes_1[i]][0] << "." 
     		          << ip_pool_sorted[indexes_1[i]][1] << "." 
@@ -109,7 +109,7 @@ int main(int argc, char const *argv[])
     		          << ip_pool_sorted[indexes_1[i]][3] << std::endl;
         }
         
-        for(auto i = 0; i < indexes4670.size(); ++i)
+        for(auto i = 0; i < indexes_4670.size(); ++i)
         {
     		std::cout << ip_pool_sorted[indexes_4670[i]][0] << "." 
     		          << ip_pool_sorted[indexes_4670[i]][1] << "." 
@@ -117,7 +117,7 @@ int main(int argc, char const *argv[])
     		          << ip_pool_sorted[indexes_4670[i]][3] << std::endl;
         }
 
-        for(auto i = 0; i < indexes46.size(); ++i)
+        for(auto i = 0; i < indexes_46.size(); ++i)
         {
     		std::cout << ip_pool_sorted[indexes_46[i]][0] << "." 
     		          << ip_pool_sorted[indexes_46[i]][1] << "." 
