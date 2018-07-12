@@ -54,12 +54,12 @@ std::vector<int> split(const std::string &str, char d, int times)
 {
     std::vector<int> r;
     int count = 0;
-    int spaceIndex = str.find_first_of(' ');    
+    int space_index = str.find_first_of(' ');    
     
     std::string::size_type start = 0;
     std::string::size_type stop = str.find_first_of(d);
 
-    while(stop != std::string::npos || count == times || stop != spaceIndex)
+    while(stop != std::string::npos || count == times || stop != space_index)
     {
         r.emplace_back(std::stoi(str.substr(start, stop - start)));
         ++count;
@@ -72,7 +72,7 @@ std::vector<int> split(const std::string &str, char d, int times)
     return r;
 }
 
-int main(int argc, char const *argv[])
+int main()
 {
     try
     {
