@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.2)
 
 set (PROJECT_VERSION_MAJOR 0)
 set (PROJECT_VERSION_MINOR 7)
-set(CMAKE_C_COMPILER "/usr/bin/gcc-7")
-set(CMAKE_CXX_COMPILER "/usr/bin/g++-7")
+set(CMAKE_C_COMPILER "/usr/bin/gcc")
+set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+
 project(ip_filter VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.$ENV{TRAVIS_BUILD_NUMBER})
 
 add_executable(ip_filter ip_filter.cpp)
