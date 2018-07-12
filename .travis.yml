@@ -1,12 +1,18 @@
 language: cpp
-include:
- - env: CXX=g++-7 CC=gcc-7
-addons:
-apt:
-   sources:
-     - ubuntu-toolchain-r-test
-   packages:
-     - g++-7
+sudo: required
+ include:
+  - env: CXX=g++-7 CC=gcc-7
+    addons:
+     apt:
+       packages:
+        - g++-7
+       sources:
+        - ubuntu-toolchain-r-test
+before_instal:
+  - sudo ap-get update qq
+install:
+  - sudo apt-get install gcc-7
+  - export CXX="g++-7"   
 script:
 - CXX=/usr/bin/g++-7 CC=/usr/bin/gcc-7 
 - cmake .
