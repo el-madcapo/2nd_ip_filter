@@ -144,9 +144,7 @@ int main()
         {
             auto v = split(line, '.', 4);
             ip_pool.emplace_back(v);
-        }     
-
-        vec_vec_int ip_pool_sorted;
+        }             
         
         ipSorting(ip_pool);
 
