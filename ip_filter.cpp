@@ -50,7 +50,7 @@ void printIpAddress(const std::vector<int>& ip_address)
 
 
 // botom of recursion
-void creatingWichByteIsNotAny(std::map<int, int>& matching_bytes, int map_key_value_counter) {};
+void creatingWichByteIsNotAny(std::map<int, int>& matching_bytes, int map_key_value_counter) {}
                   
 
 template<class T, class... Ts>
