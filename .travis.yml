@@ -14,10 +14,10 @@ install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90
 
 script: 
-- CXX=/usr/bin/g++-7 CC=/usr/bin/gcc-7 
-- cmake .
-- cmake --build .
-- cmake --build . --target package
+ - CXX=/usr/bin/g++-7 CC=/usr/bin/gcc-7 
+ - cmake .
+ - cmake --build .
+ - cmake --build . --target package
 deploy:
   provider: script
   skip_cleanup: true
