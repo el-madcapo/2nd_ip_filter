@@ -5,7 +5,7 @@ set (PROJECT_VERSION_MINOR 8)
 set(CMAKE_C_COMPILER "/usr/bin/gcc")
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 
-project(ip_filter VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
+project(ip_filter VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.$ENV{TRAVIS_BUILD_NUMBER})
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
@@ -14,11 +14,14 @@ add_executable(ip_filter ip_filter.cpp)
 add_executable(ip_test just_test.cpp)
 
 
+
 set_target_properties(ip_filter  ip_test PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
     COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra"
 )
+
+add_definitions(-DBOOST_TEST_DYN_LINK)
 
 set_target_properties(ip_test PROPERTIES
     COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
