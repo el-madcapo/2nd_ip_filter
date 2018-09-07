@@ -37,13 +37,13 @@ bool IpFilter::isIp4Address(const std::string& line) //validation: is this line 
 	return false;
     
     int index = 0;
-    int previous_separator = 0;
-    int separator_index = 0;
+    unsigned int previous_separator = 0;
+    long unsigned int separator_index = 0;
     int dots_quantity = 0;
     while (true)
     {
 	std::string temp_str;
-	int separator_index = line.find_first_of('.', index + 1);	
+	separator_index = line.find_first_of('.', index + 1);	
 				
 	if (separator_index == std::string::npos)
 	{
@@ -51,7 +51,8 @@ bool IpFilter::isIp4Address(const std::string& line) //validation: is this line 
 	          return false;
 	    
 	    int i  = 2;
-            //i = 2 because the first symbol after separator has been checked and it's correct(it's a digit)
+            // i = 2 because the first symbol after separator has been
+	    // checked and it's correct(it's a digit)
 	    while(i < 4)
 	    {
 		int cur_position = previous_separator + i;
@@ -153,13 +154,12 @@ void IpFilter::output_filter_anywhere(const vec_vec_int& ip_pool, const int& any
 std::vector<int> IpFilter::split(const std::string &str, char d, int times) 
 {
     std::vector<int> r;
-    int count = 0;
-    int space_index = str.find_first_of(' ');    
+    int count = 0;      
     
     std::string::size_type start = 0;
     std::string::size_type stop = str.find_first_of(d);
 
-    while(stop != std::string::npos || count == times || stop != space_index)
+    while(stop != std::string::npos || count == times)
     {        
         std::string ip_byte_in_string = str.substr(start, stop - start);
         int ip_byte_number = (std::stoi(ip_byte_in_string));	

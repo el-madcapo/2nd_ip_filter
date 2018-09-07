@@ -24,7 +24,7 @@ class IpFilter
     std::vector<int> split(const std::string&, char, int); // function for extracting ip addresses from input stream
 			     
 	// botom of recursion
-	void creatingWichByteIsNotAny(std::map<int, int>& matching_bytes, int map_key_value_counter) {}
+	void creatingWichByteIsNotAny(std::map<int, int>&, int) {}
 	                  
 
 	template<class T, class... Ts>
