@@ -21,7 +21,7 @@ class IpFilter
 	void printIpAddress(const std::vector<int>&);
         void output_filter_anywhere(const vec_vec_int&, const int&); //print ip address containing this value
 
-    std::vector<int> split(const std::string&, char, int); // function for extracting ip addresses from input stream
+        std::vector<int> split(const std::string&, char, int); // function for extracting ip addresses from input stream
 			     
 	// botom of recursion
 	void creatingWichByteIsNotAny(std::map<int, int>&, int) {}
