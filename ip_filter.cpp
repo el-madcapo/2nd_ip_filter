@@ -1,12 +1,11 @@
 #include "ip_filter.h"
 
+#include <ctype.h>
+
 #include <algorithm>
-#include <regex>
 #include <iostream>
 
-using vec_vec_int = std::vector<std::vector<int>>;
 
-const int ANY = -1;
 
 bool IpFilter::isAny(const int& byte) // is ip byte equal ANY value [*](as 1.*.*.3)
 {
@@ -20,20 +19,11 @@ bool IpFilter::isMatch(const int& byte, const int& value) // is byte value match
 }
 
 
-bool IpFilter::isDigit(const char a)
+// validation: is this line containig ip4 address
+bool IpFilter::isIp4Address(const std::string& line)
 {
-    if(a <= '9' && a >='0')
-    	return true;    
-    else
-    	return false;
-}
-
-
-bool IpFilter::isIp4Address(const std::string& line) //validation: is this line ip4 address
-{
-    char a = line[0];
-    bool is_Digit = isDigit(a);
-    if(!is_Digit)
+    unsigned char a = line[0];//checking the first symbol in the string    
+    if(!std::isdigit(a))
 	return false;
     
     int index = 0;
@@ -43,25 +33,29 @@ bool IpFilter::isIp4Address(const std::string& line) //validation: is this line 
     while (true)
     {
 	std::string temp_str;
-	separator_index = line.find_first_of('.', index + 1);	
+	separator_index = line.find_first_of('.', index + 1);        
 				
-	if (separator_index == std::string::npos)
+	if (separator_index == std::string::npos) // if we reached end of string 
 	{
-	    if (dots_quantity != 3)
+	    if (dots_quantity != 3) // if we haven't 3 dots  *.*.*.* 
 	          return false;
-	    
+	   
 	    int i  = 2;
             // i = 2 because the first symbol after separator has been
 	    // checked and it's correct(it's a digit)
-	    while(i < 4)
+
+	    // cycle for checking 3 last symbols after last separator
+	    // Ok. You got me. Not 3 symbols. Only 2 (previous_separator+2 and prev.separator+3)
+	    while(i < 4) 
 	    {
 		int cur_position = previous_separator + i;
 		char a  = line[cur_position];
-		if ((a < '0') || (a > '0'))
+		if (!std::isdigit(a))
 		    break;
 		++i;
 	    }
 
+	    // checking: is number in ip range
 	    temp_str = line.substr(previous_separator +1,
 				       previous_separator + i - 1);
 	        int byte_number = std::stoi(temp_str);
@@ -70,17 +64,29 @@ bool IpFilter::isIp4Address(const std::string& line) //validation: is this line 
 		else
 		    return true;		
 	}
-					   
-	char pre_dot_symbol = line[separator_index-1];
-	is_Digit = isDigit(pre_dot_symbol);
-	if(!is_Digit)
+
+	// checking quantity of symbols between tbe begining of string and first separator
+	if(previous_separator == 0 && separator_index > 3)
+	    return false;
+
+	// checking quantity of symbols between two separators
+	if(previous_separator != 0)
+	{	    
+            int byte_length = separator_index - previous_separator;
+	    if(byte_length > 4)
+	    return false;
+	}
+
+	// checking symbol before and after separator
+	char pre_dot_symbol = line[separator_index-1];	
+	if(!std::isdigit(pre_dot_symbol))
 	    return false;
 
 	char post_dot_symbol = line[separator_index+1];
-	is_Digit = isDigit(post_dot_symbol);
-	if(!is_Digit)
+	if(!std::isdigit(post_dot_symbol))
 	    return false;	
 
+	// checking ip range of first byte
 	if (index == 0 && separator_index !=1)
 	{
 	    temp_str = line.substr(index, separator_index);
@@ -88,7 +94,8 @@ bool IpFilter::isIp4Address(const std::string& line) //validation: is this line 
 	        if(( byte_number < 0) || (byte_number > 255))
 		    return false;		
 	}
-	    
+
+	// checking ip range of 2nd,3rd and 4th bytes 
 	if (index != 0 && separator_index != 1)
 	{
 		temp_str = line.substr(previous_separator +1,
@@ -98,28 +105,24 @@ bool IpFilter::isIp4Address(const std::string& line) //validation: is this line 
 		    return false;
 	}
 	
-	previous_separator = separator_index;
-	++dots_quantity;
-
 	if (dots_quantity > 3)
 	    return false;	
 
+	previous_separator = separator_index;
+	++dots_quantity;
 	index = separator_index + 1;
     }
 
     if (dots_quantity == 3)
 	return true;
-    else
-    {
-	std::cout << "not enough dots" << std::endl;
+    else        
 	return false;
-    }
 }
 
 
 void IpFilter::ipSorting(vec_vec_int& vector_original)  // sorting by lexicographical_compare
 {                      
-	std::sort(vector_original.begin(),vector_original.end(),[](auto &i,auto &j) 
+    std::sort(vector_original.begin(),vector_original.end(),[](auto &i,auto &j) 
     {
       return std::lexicographical_compare(j.begin(),j.end(),i.begin(),i.end());
     });
@@ -134,7 +137,8 @@ void IpFilter::printIpAddress(const std::vector<int>& ip_address)
               << ip_address[3] << std::endl;
 }
 
-void IpFilter::output_filter_anywhere(const vec_vec_int& ip_pool, const int& any_byte)
+
+void IpFilter::outputFilterAnywhere(const vec_vec_int& ip_pool, const int& any_byte)
 {
     for(auto& ip : ip_pool)
     {
@@ -150,29 +154,5 @@ void IpFilter::output_filter_anywhere(const vec_vec_int& ip_pool, const int& any
     }
 }
 
-// function for extracting ip addresses from input stream
-std::vector<int> IpFilter::split(const std::string &str, char d, int times) 
-{
-    std::vector<int> r;
-    int count = 0;      
-    
-    std::string::size_type start = 0;
-    std::string::size_type stop = str.find_first_of(d);
 
-    while(stop != std::string::npos || count == times)
-    {        
-        std::string ip_byte_in_string = str.substr(start, stop - start);
-        int ip_byte_number = (std::stoi(ip_byte_in_string));	
-        r.emplace_back(ip_byte_number);
-        ++count;
-        start = stop + 1;
-        stop = str.find_first_of(d, start);
-    }
-    
-    std::string str2 = str.substr(start);
-    int number = std::stoi(str2);    
-    r.emplace_back(number);
-
-    return r;
-}
 

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.8)
 
 set (PROJECT_VERSION_MAJOR 0)
 set (PROJECT_VERSION_MINOR 9)
@@ -15,14 +15,15 @@ add_library(filter ip_filter.h ip_filter.cpp)
 
 add_executable(ip_test just_test.cpp ip_filter.h ip_filter.cpp)
 
+set(target "ip_test" "filter" "ip_test")
 
-
-set_target_properties(ip_filter  filter ip_test 
-    PROPERTIES
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
-    COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra"
-)
+function(set_warning_flags target)
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+                target_compile_options(${target} PRIVATE "-Wall" "-Wextra" "-pedantic-errors")
+        elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+                target_compile_options(${target} PRIVATE "/W4")
+        endif()
+endfunction()
 
 
 set_target_properties(ip_test PROPERTIES
